@@ -1,5 +1,5 @@
 #include <stdio.h> // all the print functions
-#include <stdlib.h> // used for scanf eventually
+#include <stdlib.h> // scanf
 #include "bst.h"
 
 // a reminder of what TreeNode is
@@ -22,8 +22,20 @@ void traverse(const TreeNode* root, const TraversalType type)
 }
 
 
-void cleanup_tree(TreeNode* root) {
+void cleanup_tree(TreeNode* root)
+{
     // cleans up our tree
+}
+
+
+static void numberReadIn(int numNodes, int *nums)
+{
+    printf("Enter %d integer values to place in tree:\n", numNodes);
+
+    int res;
+
+    for(int i = 0; i < numNodes; ++i)
+        res = scanf("%d", &nums[i]);
 }
 
 
@@ -46,6 +58,19 @@ int main(int argc, char **argv)
         fprintf(stderr, "# must be greater than 0\n");
         return EXIT_FAILURE;
     }
+
+    // BEGIN NUMBER READ IN PROCEDURE ==========================================
+
+    // nums is used to store the numbers for nodes
+    int nums[numNodes];
+    // reads in the numbers and sets them into nums
+    numberReadIn(numNodes, nums);
+
+    // prints our our input values
+    printf("Input values:\n");
+    // prints our numbers we read in
+    for(int i = 0; i < numNodes; ++i)
+        printf("%d\n", nums[i]);
 
     return EXIT_SUCCESS;
 }
