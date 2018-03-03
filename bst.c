@@ -67,7 +67,49 @@ void build_tree(TreeNode** root, const int elements[], const int count)
 
 void traverse(const TreeNode* root, const TraversalType type)
 {
-    // traverses tree :)
+    // p = parent; l = left; r = right
+    switch(type)
+    {
+        // pre: p -> l -> r
+        case PREORDER:
+            // prints root data
+            printf("%d", root->data);
+
+            // traverses left branch if it exists
+            if(root->left != NULL)
+                traverse(root->left, type);
+
+            // traverses right branch if it exists
+            if(root->right != NULL)
+                traverse(root->right, type);
+            break;
+        // in: l -> p -> r
+        case INORDER:
+            // traverses left branch if it exists
+            if(root->left != NULL)
+                traverse(root->left, type);
+
+            // prints root data
+            printf("%d", root->data);
+
+            // traverses right branch if it exists
+            if(root->right != NULL)
+                traverse(root->right, type);
+            break;
+        // post: l -> r -> p
+        case POSTORDER:
+            // traverses left branch if it exists
+            if(root->left != NULL)
+                traverse(root->left, type);
+
+            // traverses right branch if it exists
+            if(root->right != NULL)
+                traverse(root->right, type);
+
+            // prints root data
+            printf("%d", root->data);
+            break;
+    }
 }
 
 
@@ -127,6 +169,20 @@ int main(int argc, char **argv)
     TreeNode *root;
     // builds our tree using root
     build_tree(&root, nums, numNodes);
+
+    // BEGIN TRAVERSALS PROCEDURE ==============================================
+
+    // traverses preorder
+    printf("Preorder:\n");
+    traverse(root, PREORDER);
+
+    // traverses inorder
+    printf("Inorder:\n");
+    traverse(root, INORDER);
+
+    // traverses postorder
+    printf("Postorder:\n");
+    traverse(root, POSTORDER);
 
     return EXIT_SUCCESS;
 }
