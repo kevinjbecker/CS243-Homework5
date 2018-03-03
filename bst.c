@@ -115,18 +115,26 @@ void traverse(const TreeNode* root, const TraversalType type)
 
 void cleanup_tree(TreeNode* root)
 {
-    // cleans up our tree
+    // recurses down the left branch if it exists
+    if(root->left != NULL)
+        cleanup_tree(root->left);
+    // recurses down the right branch if it exists
+    if(root->right != NULL)
+        cleanup_tree(root->right);
+
+    // now we have gotten here we can free our own node
+    free(root);
 }
 
 
 static void numberReadIn(int numNodes, int *nums)
 {
+    // tells user to enter numNodes integers
     printf("Enter %d integer values to place in tree:\n", numNodes);
 
-    int res;
-
+    // reads in our integers
     for(int i = 0; i < numNodes; ++i)
-        res = scanf("%d", &nums[i]);
+        scanf("%d", &nums[i]);
 }
 
 
@@ -184,5 +192,9 @@ int main(int argc, char **argv)
     printf("Postorder:\n");
     traverse(root, POSTORDER);
 
+    // CLEANUP PROCEDURE =======================================================
+    cleanup_tree(root);
+
+    // return success when we get here
     return EXIT_SUCCESS;
 }
