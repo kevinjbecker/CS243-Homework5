@@ -1,15 +1,35 @@
+///
+/// File: bst.c
+///
+/// Description:
+///
+/// @author: kjb2503 : Kevin Becker
+///
+// // // // // // // // // // // // // // // // // // // // // // // // // //
+
 #include <stdio.h> // printf
 #include <stdlib.h> // scanf, EXIT_SUCCESS, EXIT_FAILURE
 #include "bst.h"
 
-// a reminder of what TreeNode is
-// typedef struct TreeNode {
-//     int data ;                  // the data stored in the node
-//     struct TreeNode* left ;     // node's left child
-//     struct TreeNode* right ;    // node's right child
-// } TreeNode;
+/* a reminder of what TreeNode is (in bst.h)
+
+typedef struct TreeNode {
+    int data ;                  // the data stored in the node
+    struct TreeNode* left ;     // node's left child
+    struct TreeNode* right ;    // node's right child
+} TreeNode;
+
+*/
 
 
+///
+/// Function: newTreeNode
+///
+/// Description: Returns a pointer to a newly created and allocated TreeNode.
+///              NOTE: left and right are always NULL.
+///
+/// @param d The data this node should contain.
+///
 static TreeNode *newTreeNode(int d)
 {
     // creates a new node
@@ -28,43 +48,52 @@ static TreeNode *newTreeNode(int d)
     return node;
 }
 
+///
+/// Function insertChildNode
+///
+/// Description: Inserts a child node into the tree based upon its data
+///
+/// @param root The root of the tree.
+/// @param child The child node to be inserted into root.
+///
 static void insertChildNode(TreeNode *root, TreeNode *child)
 {
     // checks if we need to go left (child data <= data goes left)
     if(child->data <= root->data)
     {
-        // checks if the left node is a leaf or not
+        /* checks if the left node is a leaf or not (keeps going if
+           not a leaf) */
         if(root->left != NULL)
-        {
             insertChildNode(root->left, child);
-            return;
-        }
         else
-        {
             root->left = child;
-            return;
-        }
     }
     // if we don't need to go left, the only place we can go is right
     else
     {
-        // checks if the right node is a leaf or not
+        /* checks if the right node is a leaf or not (keeps going if
+           it is not) */
         if(root->right != NULL)
-        {
             insertChildNode(root->right, child);
-            return;
-        }
         else
-        {
             root->right = child;
-            return;
-        }
     }
 }
 
 
+///
+/// Function: build_tree
+///
+/// Description: Builds a tree of integer TreeNodes based upon the list
+///              of elements provided as parameter.
+///
+/// @param root  A pointer to the pointer of the root of the tree.
+/// @param elements[]  The list of elements to insert into the tree.
+/// @param count  The number of items in elements
+///
 void build_tree(TreeNode** root, const int elements[], const int count)
 {
+    // i is used as our index tracker
     int i = 0;
     // our first element in hardcoded (we're guaranteed this many nodes)
     *root = newTreeNode(elements[i++]);
@@ -74,10 +103,18 @@ void build_tree(TreeNode** root, const int elements[], const int count)
         insertChildNode(*root, newTreeNode(elements[i]));
 }
 
-
+///
+/// Function: traverse
+///
+/// Description: Traverses the tree using one of the traversal types.
+///
+/// @param root  The root of the tree to traverse.
+/// @param type  The traversal ``type'' to complete (pre/in/post)order.
+///
 void traverse(const TreeNode* root, const TraversalType type)
 {
     // p = parent; l = left; r = right
+    // determines which way to traverse
     switch(type)
     {
         // pre: p -> l -> r
@@ -123,21 +160,37 @@ void traverse(const TreeNode* root, const TraversalType type)
 }
 
 
+///
+/// Function: cleanup_tree
+///
+/// Description: Frees all the dynamically allocated TreeNodes within the tree.
+///
+/// @param root  The pointer to the root node to begin clean up.
+///
 void cleanup_tree(TreeNode* root)
 {
     // recurses down the left branch if it exists
-    if(NULL != root->left)
+    if(root->left != NULL)
         cleanup_tree(root->left);
     // recurses down the right branch if it exists
-    if(NULL != root->right)
+    if(root->right != NULL)
         cleanup_tree(root->right);
 
     // now we have gotten here we can free our own node
     free(root);
+    // set root to NULL
     root = NULL;
 }
 
 
+///
+/// Function: numberReadIn
+///
+/// Description: Reads in a specified number of numbers from stdin.
+///
+/// @param numNodes  The number of numbers to read in.
+/// @param nums  The number list to write to.
+///
 static void numberReadIn(int numNodes, int *nums)
 {
     // tells user to enter numNodes integers
@@ -149,6 +202,14 @@ static void numberReadIn(int numNodes, int *nums)
 }
 
 
+///
+/// Function: main
+///
+/// Description: The driver of our Binary Search Tree.
+///
+/// @param argc  The number of arguments in argv
+/// @param argv  The list of arguments provided when the program is run.
+///
 int main(int argc, char **argv)
 {
     /* prints to stderr the usage message if we don't have correct args
